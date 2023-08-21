@@ -1,0 +1,92 @@
+@media (min-height:0px) {
+body{
+    background-image: linear-gradient(to right,rgba(255, 0, 0, 0.50),rgba(0, 128, 0, 0.5));
+}
+#calculator-container{
+    border: 1px solid;
+    background:grey;
+    position:relative;
+    display:flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    top:50%;
+    left:50%;
+    height: 70%;
+    min-height: 200px;
+    max-width:50vh;
+    min-width: 142px;
+    transform:translate(-50%,-50%);
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    padding-left: 1vh;
+    padding-right: 1vh;
+}
+.screenbg{
+    background: lightgray;
+    height:20%;
+    border: 2px inset;
+    border-color: rgb(35, 35, 35);
+}
+#screen1{
+    position: relative;
+    display:flex;
+    height:25%;
+    width:100%;
+    font-size: 2vh;
+    background: none;
+    border: 0 solid;
+    text-align: right;
+    padding-top: 2px;
+    padding-right: 1vh;
+}
+#screen2{
+    position: relative;
+    display:flex;
+    height: 75%;
+    width:100%;
+    font-size: 4vh;
+    background: none;
+    border: 0 solid;
+    text-align: right;
+}
+.row{
+    margin: auto;
+    display: flex;
+    position: relative;
+    background-color: rgb(0, 128, 119);
+    white-space: nowrap;
+    height: 15.4%;
+    width: 99%;
+    padding-left: 0.25vh;
+    padding-right: 0.25vh;
+}
+button{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height:100%;
+    width: 25%;
+    font-size: 4vh;
+}
+button:hover{
+    background-color: rgb(195, 201, 201);
+    border:0;
+    border-radius: 1px;
+    transform: none;
+}
+#C,#equal{
+    width: 50%;
+}
+#row1{
+    padding-top: 0.25vh;
+}
+#row5{
+    padding-bottom: 0.25vh;
+} 
+}
+@media (min-height:480px) {
+    .row{
+        height:15.6%
+    }
+}

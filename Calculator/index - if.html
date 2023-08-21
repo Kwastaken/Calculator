@@ -1,0 +1,274 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Calculator</title>
+        <link rel="stylesheet" href="styles.css"/>
+    </head>
+    <body>
+            <div id="calculator-container">
+                <!-- div to remove line between elements-->
+                <div class="screenbg">
+                <input type="string" id="screen1" readonly>
+
+                </input>
+                <input type="string" id="screen2" readonly>
+
+                </input>
+                </div>
+                <div class="row" id="row1">
+                    <button  id="c" onclick="onClear()">
+                        C
+                    </button>
+                    <button  id="DEL" onclick="onDelete()">
+                        DEL
+                    </button>
+                    <button  id="/" onclick="onOperator()">
+                        &#247;
+                    </button>
+                </div>
+                <div class="row" id="row2">
+                    <button  id="1" onclick="onNumClick()">
+                        1
+                    </button>
+                    <button  id="2" onclick="onNumClick()">
+                        2
+                    </button>
+                    <button  id="3" onclick="onNumClick()">
+                        3
+                    </button>
+                    <button  id="*" onclick="onOperator()">
+                        x
+                    </button>
+                </div>
+                <div class="row" id="row3">
+                    <button  id="4" onclick="onNumClick()">
+                        4
+                    </button>
+                    <button  id="5" onclick="onNumClick()">
+                        5
+                    </button>
+                    <button  id="6" onclick="onNumClick()">
+                        6
+                    </button>
+                    <button  id="-" onclick="onOperator()">
+                        -
+                    </button>
+                </div>
+                <div class="row" id="row4">
+                    <button  id="7" onclick="onNumClick()">
+                        7
+                    </button>
+                    <button  id="8" onclick="onNumClick()">
+                        8
+                    </button>
+                    <button  id="9" onclick="onNumClick()">
+                        9
+                    </button>
+                    <button  id="+" onclick="onOperator()">
+                        +
+                    </button>
+                </div>
+                <div class="row" id="row5">
+                    <button  id="." onclick="onDecimal()">
+                        .
+                    </button>
+                    <button  id="0" onclick="onNumClick()">
+                        0
+                    </button>
+                    <button  id="equal" onclick="onEqual()">
+                        =
+                    </button>
+                </div>
+            </div>
+        <script>            
+
+            document.addEventListener("DOMContentLoaded", () => {
+                onClear();
+            }); 
+            
+            let valScreen2 = document.getElementById("screen2").value;
+            valScreen2 *= 1;
+            let calcAns;
+            let screenOutput;
+            let valSc2StoreAfter1stEqual;
+            let operatortype;
+            let operatortype2;
+            let result;
+            let isEqual;
+            let isOperatorClicked;
+            let isOperatorClickedThisEqual;
+            let isDecimalClicked;
+            let sinceDecimalClicked;
+            let isAfter1stEqual;
+
+            function onClear(){
+                screen2.value ="0";
+                screen1.value="";
+                isEqual=false;
+                isAfter1stEqual=false;
+                isOperatorClicked=false;
+                isDecimalClicked=false;
+                isOperatorClickedThisEqual=false;
+                sinceDecimalClicked=0;
+                calcAns=0;
+                screenOutput=0;
+                valSc2StoreAfter1stEqual=0;
+            }
+            
+            function onDelete(){
+                valScreen2=document.getElementById("screen2").value;
+                valScreen2=valScreen2.substring(0,valScreen2.length-1);
+                screen2.value=valScreen2;
+                if(isDecimalClicked==true){
+                    sinceDecimalClicked-=1;
+                }
+                if(sinceDecimalClicked==0){
+                    isDecimalClicked=false;
+                }
+            }
+
+            function onNumClick(){
+                if(isEqual==true){
+                    onClear();
+                }
+                let buttonClicked = event.target.id;
+                valScreen2 = document.getElementById("screen2").value;
+                if (valScreen2=='0'&&buttonClicked!='.') {
+                    valScreen2='';
+                }
+               screen2.value = valScreen2 + buttonClicked ;
+               isOperatorClicked=false;
+               if(isDecimalClicked==true){
+                    sinceDecimalClicked+=1;
+                } 
+            }
+            
+            function onDecimal(){
+                if(isDecimalClicked==false){
+                    onNumClick();
+                    sinceDecimalClicked=1;
+                }
+                else{return;}
+                isDecimalClicked=true;
+            }
+
+            function round(num){
+                return Math.round(num*1000)/1000;
+            }
+            
+            function onOperator(){
+                valScreen2 = document.getElementById("screen2").value;
+                valScreen2 *= 1;
+                operatortype=event.target.id;
+
+                if(isEqual==false&&isOperatorClickedThisEqual==false){  
+                    calcAns=valScreen2;             
+                    screenOutput=valScreen2;
+                    screen1.value=round(screenOutput) +' '+ operatortype;
+                }
+                else if(isEqual==true){           
+                    screenOutput=calcAns;
+                    screen1.value=round(screenOutput) +' '+ operatortype;
+                    isEqual=false;
+                }
+                else if(isOperatorClicked==false){
+                    switch (operatortype2) {
+                        case "+":   
+                            calcAns=calcAns+valScreen2;                   
+                            screenOutput=calcAns;
+                            screen1.value=round(screenOutput) +' '+ operatortype;
+                            break;
+                        case "-":
+                            calcAns=calcAns-valScreen2;
+                            screenOutput=calcAns;
+                            screen1.value=round(screenOutput) +' '+ operatortype;
+                            break;
+                        case "*":
+                            calcAns=calcAns*valScreen2;
+                            screenOutput=calcAns;
+                            screen1.value=round(screenOutput) +' '+ operatortype;
+                            break;
+                        case "/":
+                            calcAns=calcAns/valScreen2;
+                            screenOutput=calcAns;
+                            screen1.value=round(screenOutput) +' '+ operatortype;
+                            break;
+                    }
+                }
+                else{
+                    screen1.value=round(screenOutput) +' '+ operatortype;
+                }
+                screen2.value="0";
+                operatortype2=operatortype;
+                isAfter1stEqual=false;
+                isOperatorClicked=true;
+                isOperatorClickedThisEqual=true;
+                isDecimalClicked=false;
+                sinceDecimalClicked=0;
+            }
+
+            function onEqual(){
+                valScreen2 = document.getElementById("screen2").value;
+                valScreen2 *= 1;
+
+                screen1.value="";
+
+                if(calcAns==0&&isOperatorClickedThisEqual==false){
+                    screen2.value=valScreen2;
+                    screen1.value=valScreen2 ;
+                }
+                else{
+                    switch(isAfter1stEqual){
+                        case false:
+                            valSc2StoreAfter1stEqual=valScreen2;
+                            switch (operatortype) {
+                            case "+":   
+                                result=calcAns+valScreen2;
+                                break;
+                            case "-":
+                                result=calcAns-valScreen2;
+                                break;
+                            case "*":
+                                result=calcAns*valScreen2;
+                                break;
+                            case "/":
+                                result=calcAns/valScreen2;
+                                break;
+                            }
+                            screenOutput=result;
+                            screen2.value = round(screenOutput);
+                            screenOutput=calcAns;
+                            screen1.value= round(screenOutput) +' '+ operatortype +' '+ round(valScreen2)+' =';
+                            isAfter1stEqual=true;
+                            break;
+                        case true:
+                            switch (operatortype) {
+                                case "+":   
+                                    result=result+valSc2StoreAfter1stEqual;
+                                    break;
+                                case "-":
+                                    result=result-valSc2StoreAfter1stEqual;
+                                    break;
+                                case "*":
+                                    result=result*valSc2StoreAfter1stEqual;
+                                    break;
+                                case "/":
+                                    result=result/valSc2StoreAfter1stEqual;
+                                    break;
+                            }
+                            screen2.value = round(result);
+                            screen1.value=round(valScreen2) +' '+ operatortype +' '+ valSc2StoreAfter1stEqual+' =';
+                            break;
+                    }
+                }
+                isEqual=true;
+                isOperatorClickedThisEqual=false;
+                isOperatorClicked=false;
+                isDecimalClicked=false;
+                sinceDecimalClicked=0;
+                calcAns=result;
+            }
+            
+        </script>
+    </body>
+</html>
