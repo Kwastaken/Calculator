@@ -69,12 +69,6 @@ button{
     width: 25%;
     font-size: 4vh;
 }
-button:hover{
-    background-color: rgb(195, 201, 201);
-    border:0;
-    border-radius: 1px;
-    transform: none;
-}
 #C,#equal{
     width: 50%;
 }

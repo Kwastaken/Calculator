@@ -86,15 +86,14 @@
                 onClear();
             }); 
             
-            let valScreen2 = document.getElementById("screen2").value;
-            valScreen2 *= 1;
+            let valScreen2;
             let calcAns;
             let screenOutput;
             let valSc2StoreAfter1stEqual;
             let operatortype;
             let operatortype2;
             let result;
-            let isEqual;
+            let isEqualClicked;
             let isOperatorClicked;
             let isOperatorClickedThisEqual;
             let isDecimalClicked;
@@ -104,7 +103,7 @@
             function onClear(){
                 screen2.value ="0";
                 screen1.value="";
-                isEqual=false;
+                isEqualClicked=false;
                 isAfter1stEqual=false;
                 isOperatorClicked=false;
                 isDecimalClicked=false;
@@ -128,7 +127,7 @@
             }
 
             function onNumClick(){
-                if(isEqual==true){
+                if(isEqualClicked==true){
                     onClear();
                 }
                 let buttonClicked = event.target.id;
@@ -161,52 +160,40 @@
                 valScreen2 *= 1;
                 operatortype=event.target.id;
 
-                switch (isOperatorClickedThisEqual){
-                    case false:
-                        switch (isEqual){
-                            case false:
-                                calcAns=valScreen2;             
-                                screenOutput=valScreen2;
-                                screen1.value=round(screenOutput) +' '+ operatortype;
+                if(isEqualClicked==false&&isOperatorClickedThisEqual==false){  
+                    calcAns=valScreen2;             
+                    screenOutput=valScreen2;
+                    screen1.value=round(screenOutput) +' '+ operatortype;
+                }
+                else if(isEqualClicked==true){           
+                    screenOutput=calcAns;
+                    screen1.value=round(screenOutput) +' '+ operatortype;
+                    isEqualClicked=false;
+                }
+                else{
+                    if(isOperatorClicked==false){
+                        switch (operatortype2) {
+                            case "+":   
+                                calcAns=calcAns+valScreen2;                   
                                 break;
-                            case true:
-                                screenOutput=calcAns;
-                                screen1.value=round(screenOutput) +' '+ operatortype;
-                                isEqual=false;
+                            case "-":
+                                calcAns=calcAns-valScreen2;
                                 break;
-
+                            case "*":
+                                calcAns=calcAns*valScreen2;
+                                break;
+                            case "/":
+                                calcAns=calcAns/valScreen2;
+                                break;
                         }
-                        break;
-                    default:
-                        switch(isOperatorClicked){
-                            case false:
-                                switch (operatortype2) {
-                                    case "+":   
-                                        calcAns=calcAns+valScreen2;                   
-                                        screenOutput=calcAns;
-                                        screen1.value=round(screenOutput) +' '+ operatortype;
-                                        break;
-                                    case "-":
-                                        calcAns=calcAns-valScreen2;
-                                        screenOutput=calcAns;
-                                        screen1.value=round(screenOutput) +' '+ operatortype;
-                                        break;
-                                    case "*":
-                                        calcAns=calcAns*valScreen2;
-                                        screenOutput=calcAns;
-                                        screen1.value=round(screenOutput) +' '+ operatortype;
-                                        break;
-                                    case "/":
-                                        calcAns=calcAns/valScreen2;
-                                        screenOutput=calcAns;
-                                        screen1.value=round(screenOutput) +' '+ operatortype;
-                                        break;
-                                }
-                                break;
-                            default:
-                            screen1.value=round(screenOutput) +' '+ operatortype;
-                        }
-                }        
+                        screenOutput=calcAns;
+                        screen1.value=round(screenOutput) +' '+ operatortype;
+                    }
+                    else{
+                        screen1.value=round(screenOutput) +' '+ operatortype;
+                    }
+                }
+                       
                 screen2.value="0";
                 operatortype2=operatortype;
                 isAfter1stEqual=false;
@@ -214,7 +201,7 @@
                 isOperatorClickedThisEqual=true;
                 isDecimalClicked=false;
                 sinceDecimalClicked=0;
-                }
+            }
 
             function onEqual(){
                 valScreen2 = document.getElementById("screen2").value;
@@ -224,53 +211,51 @@
 
                 if(calcAns==0&&isOperatorClickedThisEqual==false){
                     screen2.value=valScreen2;
-                    screen1.value=valScreen2 ;
+                    screen1.value=valScreen2;
                 }
                 else{
-                    switch(isAfter1stEqual){
-                        case false:
-                            valSc2StoreAfter1stEqual=valScreen2;
-                            switch (operatortype) {
+                    if(isAfter1stEqual==false){
+                        valSc2StoreAfter1stEqual=valScreen2;
+                        switch (operatortype) {
+                        case "+":   
+                            result=calcAns+valScreen2;
+                            break;
+                        case "-":
+                            result=calcAns-valScreen2;
+                            break;
+                        case "*":
+                            result=calcAns*valScreen2;
+                            break;
+                        case "/":
+                            result=calcAns/valScreen2;
+                            break;
+                        }
+                        screenOutput=result;
+                        screen2.value = round(screenOutput);
+                        screenOutput=calcAns;
+                        screen1.value= round(screenOutput) +' '+ operatortype +' '+ round(valScreen2)+' =';
+                        isAfter1stEqual=true;
+                    }
+                    else if(isAfter1stEqual==true){
+                        switch (operatortype) {
                             case "+":   
-                                result=calcAns+valScreen2;
+                                result=result+valSc2StoreAfter1stEqual;
                                 break;
                             case "-":
-                                result=calcAns-valScreen2;
+                                result=result-valSc2StoreAfter1stEqual;
                                 break;
                             case "*":
-                                result=calcAns*valScreen2;
+                                result=result*valSc2StoreAfter1stEqual;
                                 break;
                             case "/":
-                                result=calcAns/valScreen2;
+                                result=result/valSc2StoreAfter1stEqual;
                                 break;
-                            }
-                            screenOutput=result;
-                            screen2.value = round(screenOutput);
-                            screenOutput=calcAns;
-                            screen1.value= round(screenOutput) +' '+ operatortype +' '+ round(valScreen2)+' =';
-                            isAfter1stEqual=true;
-                            break;
-                        case true:
-                            switch (operatortype) {
-                                case "+":   
-                                    result=result+valSc2StoreAfter1stEqual;
-                                    break;
-                                case "-":
-                                    result=result-valSc2StoreAfter1stEqual;
-                                    break;
-                                case "*":
-                                    result=result*valSc2StoreAfter1stEqual;
-                                    break;
-                                case "/":
-                                    result=result/valSc2StoreAfter1stEqual;
-                                    break;
-                            }
-                            screen2.value = round(result);
-                            screen1.value=round(valScreen2) +' '+ operatortype +' '+ valSc2StoreAfter1stEqual+' =';
-                            break;
-                    }
+                        }
+                        screen2.value = round(result);
+                        screen1.value=round(valScreen2) +' '+ operatortype +' '+ valSc2StoreAfter1stEqual+' =';
+                    }   
                 }
-                isEqual=true;
+                isEqualClicked=true;
                 isOperatorClickedThisEqual=false;
                 isOperatorClicked=false;
                 isDecimalClicked=false;
