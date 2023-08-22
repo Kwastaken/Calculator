@@ -30,3 +30,5 @@ For example:
 4. Numbers have no logic to them, all you needed to do was add it to the number currently there. With that in mind I reduced the function you created to handle number input from 13 lines to 1
 
 It will come with more practice bro :thumbsup:
+
+_p.s you can go back in and do your rounding thingy_

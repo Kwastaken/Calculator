@@ -84,16 +84,17 @@
                 </div>
             </div>
         <script>
+
+           //You should be able to read code like an essay almost 
          
            const buttons = document.querySelectorAll("button");
            const mainScreen = document.getElementById("main-screen");
            const secondaryScreen = document.getElementById("secondary-screen");
            const operatorDisplay = document.getElementById("operator-display");
 
-           let currOperator;
+           let currOperator; //this will keep track of the current operator and reduce the amount of lines of logic we need to write down the line
 
-
-           buttons.forEach((button) => {
+           buttons.forEach((button) => { //one function responsible for deciding what to do with an input
             button.addEventListener("click", (e) => {
                if(button.dataset.type === "number"){
                   handleNumber(button.dataset.value)
@@ -104,14 +105,14 @@
            })
 
 
-           function handleNumber(num) {
+           function handleNumber(num) { //All we need to do is add the number to the main number
              mainScreen.value += num;
            }
 
            function handleOperator(operator) {
              switch (operator) {
 
-                case "cls":
+                case "cls": //I changed this to cls because it is the command line command to clear the screen, a bit more familiarity
                   mainScreen.value = "0";
                   secondaryScreen.value = "";
                   currOperator = undefined;
@@ -141,7 +142,7 @@
                     break;   
                     
                 case "=":
-                    calculateAnswer()
+                    calculateAnswer();
                     break;    
 
                 
@@ -151,9 +152,7 @@
              }
            }
 
-           function setOperator(operator) {
-                console.log(operator)
-                 
+           function setOperator(operator) { //this sets the operator and adjusts the UI as necessary
                 if(!currOperator) {//This means if currOperator is undefined. Look up implicit type coercion                     
                     secondaryScreen.value = mainScreen.value;
                     currOperator = operator;
@@ -166,7 +165,7 @@
                 
            }
 
-           function calculateAnswer() {
+           function calculateAnswer() { //this function handles all calculations
               const num1 =  Number.parseFloat(secondaryScreen.value);
               const num2 = Number.parseFloat(mainScreen.value);
               let answer;
@@ -196,194 +195,7 @@
               secondaryScreen.value = "";
               operatorDisplay.value = "";
               mainScreen.value = answer;
-
-           }
-
-            document.addEventListener("DOMContentLoaded", () => {
-                onClear();
-            }); 
-            
-            let valScreen2;
-            let calcAns;
-            let screenOutput;
-            let valSc2StoreAfter1stEqual;
-            let operatortype;
-            let operatortype2;
-            let result;
-            let isEqualClicked;
-            let isOperatorClicked;
-            let isOperatorClickedThisEqual;
-            let isDecimalClicked;
-            let sinceDecimalClicked;
-            let isAfter1stEqual;
-
-            function onClear(){
-                screen2.value ="0";
-                screen1.value="";
-                isEqualClicked=false;
-                isAfter1stEqual=false;
-                isOperatorClicked=false;
-                isDecimalClicked=false;
-                isOperatorClickedThisEqual=false;
-                sinceDecimalClicked=0;
-                calcAns=0;
-                screenOutput=0;
-                valSc2StoreAfter1stEqual=0;
-            }
-            
-            function onDelete(){
-                valScreen2=document.getElementById("screen2").value;
-                valScreen2=valScreen2.substring(0,valScreen2.length-1);
-                screen2.value=valScreen2;
-                if(isDecimalClicked==true){
-                    sinceDecimalClicked-=1;
-                }
-                if(sinceDecimalClicked==0){
-                    isDecimalClicked=false;
-                }
-                if(isEqualClicked==true){
-                isEqualClicked=false;
-                result=valScreen2;
-                }
-            }
-
-            function onNumClick(){
-                if(isEqualClicked==true){
-                    onClear();
-                }
-                let buttonClicked = event.target.id;
-                valScreen2 = document.getElementById("screen2").value;
-                if (valScreen2=='0'&&buttonClicked!='.') {
-                    valScreen2='';
-                }
-               screen2.value = valScreen2 + buttonClicked ;
-               isOperatorClicked=false;
-               if(isDecimalClicked==true){
-                    sinceDecimalClicked+=1;
-                } 
-            }
-            
-            function onDecimal(){
-                if(isDecimalClicked==false){
-                    onNumClick();
-                    sinceDecimalClicked=1;
-                }
-                else{return;}
-                isDecimalClicked=true;
-            }
-
-            function round(num){
-                return Math.round(num*1000)/1000;
-            }
-            
-            function onOperator(){
-                valScreen2 = document.getElementById("screen2").value;
-                valScreen2 *= 1;
-                operatortype=event.target.id;
-
-                if(isEqualClicked==false&&isOperatorClickedThisEqual==false){  
-                    calcAns=valScreen2;             
-                    screenOutput=valScreen2;
-                    screen1.value=round(screenOutput) +' '+ operatortype;
-                }
-                else if(isEqualClicked==true){           
-                    screenOutput=calcAns;
-                    screen1.value=round(screenOutput) +' '+ operatortype;
-                    isEqualClicked=false;
-                }
-                else{
-                    if(isOperatorClicked==false){
-                        switch (operatortype2) {
-                            case "+":   
-                                calcAns=calcAns+valScreen2;                   
-                                break;
-                            case "-":
-                                calcAns=calcAns-valScreen2;
-                                break;
-                            case "*":
-                                calcAns=calcAns*valScreen2;
-                                break;
-                            case "/":
-                                calcAns=calcAns/valScreen2;
-                                break;
-                        }
-                        screenOutput=calcAns;
-                        screen1.value=round(screenOutput) +' '+ operatortype;
-                    }
-                    else{
-                        screen1.value=round(screenOutput) +' '+ operatortype;
-                    }
-                }
-                       
-                screen2.value="0";
-                operatortype2=operatortype;
-                isAfter1stEqual=false;
-                isOperatorClicked=true;
-                isOperatorClickedThisEqual=true;
-                isDecimalClicked=false;
-                sinceDecimalClicked=0;
-            }
-
-            function onEqual(){
-                valScreen2 = document.getElementById("screen2").value;
-                valScreen2 *= 1;
-
-                screen1.value="";
-
-                if(calcAns==0&&isOperatorClickedThisEqual==false){
-                    screen2.value=valScreen2;
-                    screen1.value=valScreen2;
-                }
-                else{
-                    if(isAfter1stEqual==false){
-                        valSc2StoreAfter1stEqual=valScreen2;
-                        switch (operatortype) {
-                        case "+":   
-                            result=calcAns+valScreen2;
-                            break;
-                        case "-":
-                            result=calcAns-valScreen2;
-                            break;
-                        case "*":
-                            result=calcAns*valScreen2;
-                            break;
-                        case "/":
-                            result=calcAns/valScreen2;
-                            break;
-                        }
-                        screenOutput=result;
-                        screen2.value = round(screenOutput);
-                        screenOutput=calcAns;
-                        screen1.value= round(screenOutput) +' '+ operatortype +' '+ round(valScreen2)+' =';
-                        isAfter1stEqual=true;
-                    }
-                    else if(isAfter1stEqual==true){
-                        switch (operatortype) {
-                            case "+":   
-                                result=result+valSc2StoreAfter1stEqual;
-                                break;
-                            case "-":
-                                result=result-valSc2StoreAfter1stEqual;
-                                break;
-                            case "*":
-                                result=result*valSc2StoreAfter1stEqual;
-                                break;
-                            case "/":
-                                result=result/valSc2StoreAfter1stEqual;
-                                break;
-                        }
-                        screen2.value = round(result);
-                        screen1.value=round(valScreen2) +' '+ operatortype +' '+ valSc2StoreAfter1stEqual+' =';
-                    }   
-                }
-                isEqualClicked=true;
-                isOperatorClickedThisEqual=false;
-                isOperatorClicked=false;
-                isDecimalClicked=false;
-                sinceDecimalClicked=0;
-                calcAns=result;
-            }
-            
+           }            
         </script>
     </body>
 </html>
