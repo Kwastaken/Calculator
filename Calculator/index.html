@@ -8,79 +8,196 @@
             <div id="calculator-container">
                 <!-- div to remove line between elements-->
                 <div class="screenbg">
-                <input type="string" id="screen1" readonly>
+                <input type="string" id="secondary-screen" readonly>
 
                 </input>
-                <input type="string" id="screen2" readonly>
+                <input type="string" id="operator-display" readonly>
+
+                </input>
+                <input type="string" id="main-screen" readonly>
 
                 </input>
                 </div>
                 <div class="row" id="row1">
-                    <button  id="c" onclick="onClear()">
+                    <button id="clear"  data-value="cls" data-type="operator">
                         C
                     </button>
-                    <button  id="DEL" onclick="onDelete()">
+                    <button  data-value="del" data-type="operator">
                         DEL
                     </button>
-                    <button  id="/" onclick="onOperator()">
+                    <button data-value="/" data-type="operator">
                         &#247;
                     </button>
                 </div>
                 <div class="row" id="row2">
-                    <button  id="1" onclick="onNumClick()">
+                    <button  data-value ="1" data-type="number">
                         1
                     </button>
-                    <button  id="2" onclick="onNumClick()">
+                    <button  data-value ="2" data-type="number">
                         2
                     </button>
-                    <button  id="3" onclick="onNumClick()">
+                    <button  data-value ="3" data-type="number">
                         3
                     </button>
-                    <button  id="*" onclick="onOperator()">
+                    <button  data-value ="*"  data-type="operator" >
                         x
                     </button>
                 </div>
                 <div class="row" id="row3">
-                    <button  id="4" onclick="onNumClick()">
+                    <button  data-value="4" data-type="number" >
                         4
                     </button>
-                    <button  id="5" onclick="onNumClick()">
+                    <button  data-value="5" data-type="number" >
                         5
                     </button>
-                    <button  id="6" onclick="onNumClick()">
+                    <button  data-value="6" data-type="number" >
                         6
                     </button>
-                    <button  id="-" onclick="onOperator()">
+                    <button  data-value="-" data-type="operator"  >
                         -
                     </button>
                 </div>
                 <div class="row" id="row4">
-                    <button  id="7" onclick="onNumClick()">
+                    <button  data-value="7" data-type="number" >
                         7
                     </button>
-                    <button  id="8" onclick="onNumClick()">
+                    <button  data-value="8" data-type="number" >
                         8
                     </button>
-                    <button  id="9" onclick="onNumClick()">
+                    <button  data-value="9" data-type="number">
                         9
                     </button>
-                    <button  id="+" onclick="onOperator()">
+                    <button  data-value="+"  data-type="operator" >
                         +
                     </button>
                 </div>
                 <div class="row" id="row5">
-                    <button  id="." onclick="onDecimal()">
+                    <button  data-value="." data-type="number">
                         .
                     </button>
-                    <button  id="0" onclick="onNumClick()">
+                    <button  data-value="0" data-type="number" >
                         0
                     </button>
-                    <button  id="equal" onclick="onEqual()">
+                    <button id="equal" data-value="=" data-type="operator">
                         =
                     </button>
                 </div>
             </div>
-        <script>            
+        <script>
+         
+           const buttons = document.querySelectorAll("button");
+           const mainScreen = document.getElementById("main-screen");
+           const secondaryScreen = document.getElementById("secondary-screen");
+           const operatorDisplay = document.getElementById("operator-display");
+
+           let currOperator;
+
+
+           buttons.forEach((button) => {
+            button.addEventListener("click", (e) => {
+               if(button.dataset.type === "number"){
+                  handleNumber(button.dataset.value)
+               } else {
+                handleOperator(button.dataset.value)
+               }  
+            })
+           })
+
+
+           function handleNumber(num) {
+             mainScreen.value += num;
+           }
+
+           function handleOperator(operator) {
+             switch (operator) {
+
+                case "cls":
+                  mainScreen.value = "0";
+                  secondaryScreen.value = "";
+                  currOperator = undefined;
+                  operatorDisplay.value = "";
+                  break;
+
+                case "del":
+                  const newValue = mainScreen.value.slice(0, -1); //Look up the slice method, a string is an array of characters so I am using an 
+                                                                  //array method to "slice" the string but leave out the last character
+                  mainScreen.value = newValue;
+                  break;
+
+                case "/":
+                    setOperator("/")
+                    break;
+
+                case "*":
+                    setOperator("*")
+                    break;
+                
+                case "-":
+                    setOperator("-")
+                    break;
+                
+                case "+":
+                    setOperator("+")
+                    break;   
+                    
+                case "=":
+                    calculateAnswer()
+                    break;    
+
+                
+                default:
+                    break;
+
+             }
+           }
+
+           function setOperator(operator) {
+                console.log(operator)
+                 
+                if(!currOperator) {//This means if currOperator is undefined. Look up implicit type coercion                     
+                    secondaryScreen.value = mainScreen.value;
+                    currOperator = operator;
+                    operatorDisplay.value = operator;
+                    mainScreen.value = "";
+                } else {
+                    currOperator = operator;
+                    operatorDisplay.value = operator;
+                }
+                
+           }
+
+           function calculateAnswer() {
+              const num1 =  Number.parseFloat(secondaryScreen.value);
+              const num2 = Number.parseFloat(mainScreen.value);
+              let answer;
+              
+              switch (currOperator) {
+                case "/":
+                    answer = num1 / num2;
+                    break;
+
+                case "*":
+                    answer = num1 * num2;
+                    break;
+                
+                case "-":
+                    answer = num1 - num2;
+                    break;
+                
+                case "+":
+                    answer = num1 + num2;
+                    break;
+
+                default:
+                    answer = NaN
+                    break;    
+              }
+              
+              secondaryScreen.value = "";
+              operatorDisplay.value = "";
+              mainScreen.value = answer;
+
+           }
 
             document.addEventListener("DOMContentLoaded", () => {
                 onClear();

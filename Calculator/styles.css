@@ -27,27 +27,33 @@ body{
     border: 2px inset;
     border-color: rgb(35, 35, 35);
 }
-#screen1{
+
+.screenbg > input {
     position: relative;
     display:flex;
+    width:100%;
+    background: none;
+    border: 0 solid;
+    text-align: right;
+}
+#secondary-screen{
     height:25%;
     width:100%;
     font-size: 2vh;
     background: none;
-    border: 0 solid;
-    text-align: right;
     padding-top: 2px;
     padding-right: 1vh;
 }
-#screen2{
-    position: relative;
-    display:flex;
-    height: 75%;
+#main-screen{
+    height: 60%;
     width:100%;
     font-size: 4vh;
-    background: none;
-    border: 0 solid;
-    text-align: right;
+}
+
+#operator-display {
+    font-size: 16px;
+    height: 15%;
+    width: 100%;
 }
 .row{
     margin: auto;
@@ -69,7 +75,7 @@ button{
     width: 25%;
     font-size: 4vh;
 }
-#C,#equal{
+#clear, #equal{
     width: 50%;
 }
 #row1{
