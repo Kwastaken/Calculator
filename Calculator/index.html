@@ -106,6 +106,9 @@
 
 
            function handleNumber(num) { //All we need to do is add the number to the main number
+             if(mainScreen.value.at(-1) == "." && num == ".") {
+                 mainScreen.value = mainScreen.value.slice(0, -1);
+              }
              mainScreen.value += num;
            }
 
@@ -159,6 +162,9 @@
                     operatorDisplay.value = operator;
                     mainScreen.value = "";
                 } else {
+                    calculateAnswer();
+                    secondaryScreen.value = mainScreen.value;
+                    mainScreen.value = "";
                     currOperator = operator;
                     operatorDisplay.value = operator;
                 }
