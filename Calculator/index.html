@@ -92,8 +92,15 @@
            const secondaryScreen = document.getElementById("secondary-screen");
            const operatorDisplay = document.getElementById("operator-display");
 
+           let answer;
+           let num1;
+           let num2;
            let currOperator; //this will keep track of the current operator and reduce the amount of lines of logic we need to write down the line
 
+           document.addEventListener("DOMContentLoaded", () => {
+                handleOperator("cls");
+            });
+             
            buttons.forEach((button) => { //one function responsible for deciding what to do with an input
             button.addEventListener("click", (e) => {
                if(button.dataset.type === "number"){
@@ -104,10 +111,19 @@
             })
            })
 
+           function round(num){
+                return Math.round(num*1000)/1000;
+            }
 
            function handleNumber(num) { //All we need to do is add the number to the main number
-             if(mainScreen.value.at(-1) == "." && num == ".") {
-                 mainScreen.value = mainScreen.value.slice(0, -1);
+            if(answer){
+                handleOperator("cls");
+            }
+            if (mainScreen.value=="0"&&num != "."){
+                mainScreen.value="";
+            }
+            if(mainScreen.value.includes(".") && num == ".") {
+                 return;
               }
              mainScreen.value += num;
            }
@@ -120,13 +136,26 @@
                   secondaryScreen.value = "";
                   currOperator = undefined;
                   operatorDisplay.value = "";
+                  answer=undefined;
+                  num1=undefined;
                   break;
 
                 case "del":
-                  const newValue = mainScreen.value.slice(0, -1); //Look up the slice method, a string is an array of characters so I am using an 
-                                                                  //array method to "slice" the string but leave out the last character
-                  mainScreen.value = newValue;
-                  break;
+                    if(mainScreen.value!="0"){
+                        if(mainScreen.value.length!=1){                    
+                            
+                            const newValue = mainScreen.value.slice(0, -1); //Look up the slice method, a string is an array of characters so I am using an 
+                                                                          //array method to "slice" the string but leave out the last character
+                            mainScreen.value = newValue;
+                        }
+                        else{
+                            mainScreen.value="0"
+                        }
+                    }
+                    if(answer){
+                    handleOperator("cls");
+                    }
+                    break;
 
                 case "/":
                     setOperator("/")
@@ -145,37 +174,48 @@
                     break;   
                     
                 case "=":
+                    if (operatorDisplay.value==""&&!answer){
+                        secondaryScreen.value=mainScreen.value;
+                    }
+                    else{
                     calculateAnswer();
+                    }
                     break;    
 
-                
                 default:
+
                     break;
 
              }
            }
 
            function setOperator(operator) { //this sets the operator and adjusts the UI as necessary
-                if(!currOperator) {//This means if currOperator is undefined. Look up implicit type coercion                     
+                if(!currOperator||operatorDisplay.value=="") {//This means if currOperator is undefined. Look up implicit type coercion                     
                     secondaryScreen.value = mainScreen.value;
-                    currOperator = operator;
-                    operatorDisplay.value = operator;
-                    mainScreen.value = "";
-                } else {
-                    calculateAnswer();
-                    secondaryScreen.value = mainScreen.value;
-                    mainScreen.value = "";
-                    currOperator = operator;
-                    operatorDisplay.value = operator;
                 }
-                
+                else if(answer){
+                    num1=answer;
+                    secondaryScreen.value = round(answer);
+                } 
+                else if(mainScreen.value!="0"){
+                    calculateAnswer();
+                    secondaryScreen.value = round(mainScreen.value);
+                }
+                currOperator = operator;
+                operatorDisplay.value = operator;
+                answer=undefined;
+                mainScreen.value="0";
            }
 
            function calculateAnswer() { //this function handles all calculations
-              const num1 =  Number.parseFloat(secondaryScreen.value);
-              const num2 = Number.parseFloat(mainScreen.value);
-              let answer;
-              
+
+            if(!num1){              
+                    num1 =  Number.parseFloat(secondaryScreen.value);
+                    num2 = Number.parseFloat(mainScreen.value);
+            }
+            else if(!answer){
+                num2 = Number.parseFloat(mainScreen.value);
+            }
               switch (currOperator) {
                 case "/":
                     answer = num1 / num2;
@@ -194,13 +234,14 @@
                     break;
 
                 default:
-                    answer = NaN
+                    answer = "NaN";
                     break;    
               }
               
-              secondaryScreen.value = "";
-              operatorDisplay.value = "";
-              mainScreen.value = answer;
+              secondaryScreen.value =`${round(num1)} ${currOperator} ${round(num2)}`;
+              operatorDisplay.value = "=";
+              num1 = answer;
+              mainScreen.value = round(answer);
            }            
         </script>
     </body>

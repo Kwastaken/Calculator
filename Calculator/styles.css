@@ -40,7 +40,6 @@ body{
     height:25%;
     width:100%;
     font-size: 2vh;
-    background: none;
     padding-top: 2px;
     padding-right: 1vh;
 }
@@ -51,7 +50,9 @@ body{
 }
 
 #operator-display {
-    font-size: 16px;
+    padding-top: 2px;
+    padding-right: 1vh;
+    font-size: 1.25vh;
     height: 15%;
     width: 100%;
 }
